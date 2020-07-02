@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-// using async and when you work with mongoose you're working with promises 
+// Using async because when you work with mongoose you're working with promises 
 // can also use .then
 const connectDB = async () => {
     try {
@@ -10,9 +10,7 @@ const connectDB = async () => {
             useUnifiedTopology: true,
             useFindAndModify: false
         })
-
         console.log(`MongoDB connected ${conn.connection.host}`)
-
     }
     catch (err) {
         console.error(err)
