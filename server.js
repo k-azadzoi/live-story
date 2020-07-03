@@ -6,6 +6,7 @@ const morgan = require('morgan')
 const exphbs = require('express-handlebars')
 const passport = require('passport')
 const session = require('express-session')
+
 const connectDB = require('./config/db')
 
 // Load config file for our global variables 
@@ -47,6 +48,7 @@ server.use(express.static(path.join(__dirname, 'public')))
 
 //Routes
 server.use('/', require('./routes/index'))
+server.use('/auth', require('./routes/auth'))
 
 
 const PORT = process.env.PORT || 3000
