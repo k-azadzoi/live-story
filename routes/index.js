@@ -1,5 +1,4 @@
 // Homepage Route
-
 const express = require('express')
 const router = express.Router()
 const { authUser, authGuest } = require('../middleware/auth')
