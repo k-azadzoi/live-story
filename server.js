@@ -22,6 +22,10 @@ connectDB()
 //Initialize 
 const server = express()
 
+// Body parser
+server.use(express.urlencoded({ extended: false }))
+server.use(express.json())
+
 
 //Logging
 if (process.env.NODE_ENV === 'development') {
