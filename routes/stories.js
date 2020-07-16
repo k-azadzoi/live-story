@@ -27,4 +27,23 @@ router.post('/', authUser, async (req, res) => {
         res.render('error/404')
     }
 })
+
+// Retrieve all stories
+// route GET /stories
+
+router.get('/', authUser, async (req,res) => {
+    try {
+        const stories = await Story.find({ status: 'public' })
+            .populate('user')
+            .sort({ createdAt: 'desc' })
+            .lean()
+        res.render('stories/index', {
+            stories,
+        })
+    } catch (error) {
+        console.error(error)
+        res.render('error/404')
+    }
+})
+
 module.exports = router

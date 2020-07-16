@@ -33,8 +33,12 @@ if (process.env.NODE_ENV === 'development') {
     server.use(morgan('dev'))
 } 
 
+//Handlebars helpers
+
+const { formatDate, stripTags, truncate } = require('./helpers/hbs')
+
 //Handlebars
-server.engine('.hbs', exphbs({ defaultLayoutextname: 'main', extname: '.hbs' }))
+server.engine('.hbs', exphbs({ helpers: { formatDate, stripTags, truncate }, defaultLayoutextname: 'main', extname: '.hbs' }))
 server.set('view engine', '.hbs')
 
 //Session middleware
