@@ -4,6 +4,7 @@ const express = require('express')
 const mongoose = require('mongoose')
 const dotenv = require('dotenv')
 const morgan = require('morgan')
+const methodOverride = require('method-override')
 const exphbs = require('express-handlebars')
 const passport = require('passport')
 const session = require('express-session')
@@ -26,6 +27,16 @@ const server = express()
 server.use(express.urlencoded({ extended: false }))
 server.use(express.json())
 
+// Method override https://www.npmjs.com/package/method-override
+server.use(methodOverride(function (req, res) {
+  if (req.body && typeof req.body === 'object' && '_method' in req.body) {
+    // look in urlencoded POST bodies and delete it
+    let method = req.body._method
+    delete req.body._method
+    return method
+  }
+}))
+
 
 //Logging
 if (process.env.NODE_ENV === 'development') {
@@ -35,10 +46,10 @@ if (process.env.NODE_ENV === 'development') {
 
 //Handlebars helpers
 
-const { formatDate, stripTags, truncate } = require('./helpers/hbs')
+const { formatDate, stripTags, truncate, editIcon, select } = require('./helpers/hbs')
 
 //Handlebars
-server.engine('.hbs', exphbs({ helpers: { formatDate, stripTags, truncate }, defaultLayoutextname: 'main', extname: '.hbs' }))
+server.engine('.hbs', exphbs({ helpers: { formatDate, stripTags, truncate, editIcon, select }, defaultLayoutextname: 'main', extname: '.hbs' }))
 server.set('view engine', '.hbs')
 
 //Session middleware
@@ -53,6 +64,13 @@ server.use(session({
 //passport.initialize() middleware is required to initialize Passport
 server.use(passport.initialize());
 server.use(passport.session());
+
+//Set global var
+
+server.use(function (req, res, next) {
+  res.locals.user = req.user || null
+  next()
+})
 
 //Static folder
 server.use(express.static(path.join(__dirname, 'public')))
